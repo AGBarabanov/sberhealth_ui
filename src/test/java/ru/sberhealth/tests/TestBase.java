@@ -14,8 +14,6 @@ public class TestBase {
         Configuration.browser = "firefox";
         Configuration.browserSize = "1920x1080";
         baseUrl="https://sberhealth.ru/";
-        open(baseUrl);
-        $$(".the-header__links a").find(text("Приём врача в клинике")).click();
     }
 
 }
