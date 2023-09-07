@@ -7,6 +7,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -32,6 +33,7 @@ public class ChoiceDoctor extends TestBase{
     @Tags({@Tag("BLOCKER"), @Tag("REGRESS")})
     void checkСities(String city, List<String> districts){
         open("https://docdoc.ru/");
+
         $("[data-test-id = city-select-button]").click();
         $$(".CitySelectModal__cities-wrapper_1BfH span").find(text(city)).click();
         $("[data-test-id = search_geo_input]").click();
@@ -65,7 +67,20 @@ public class ChoiceDoctor extends TestBase{
         $("[data-test-id = search_button]").click();
 
         $$("[data-test-id = doctor-list-page-card-details__specialities]").find((text("Акушер")));
+    }
 
+
+    @DisplayName("Проверка выбора города")
+    @ParameterizedTest
+    @ValueSource(strings = {"Альметьевск", "Анапа"})
+    @Tags({@Tag("CRITICAL"), @Tag("REGRESS")})
+    void checkChoiceCity(String argument){
+        open("https://docdoc.ru/");
+
+        $("[data-test-id = city-select-button]").click();
+        $$(".CitySelectModal__cities-wrapper_1BfH span").find(text(argument)).click();
+
+        $("[data-test-id = city-select-button]").shouldHave(text(argument));
 
     }
 }
