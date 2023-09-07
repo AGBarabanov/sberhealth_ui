@@ -1,6 +1,7 @@
 package ru.sberhealth.tests;
 
 import com.codeborne.selenide.CollectionCondition;
+import com.codeborne.selenide.selector.ByText;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -38,13 +39,33 @@ public class ChoiceDoctor extends TestBase{
     }
 
 
-    @ParameterizedTest(name = "Проверка отображения названия сппециальностей {1}, при выборе специальности {0}")
+    @ParameterizedTest(name = "Проверка отображения названия врачей {1}, при выборе специальности {0}")
     @CsvFileSource(
-            resources = "/NamesOfSpecialties.csv",
-            delimiter = '|'
+            resources = "/NamesOfSpecialties.csv"
     )
     @Tags({@Tag("CRITICAL"), @Tag("REGRESS")})
-    void choiceOfSpecialty(){
+    public void choiceOfSpecialty(String specialty, String doctor){
+        open("https://docdoc.ru/");
+
+        $("#autocomplete__placeholder").click();
+        $$(".v-autocomplete-list").find((text(specialty))).click();
+        $("[data-test-id = search_button]").click();
+        $("[data-test-id=top_content_seo]").shouldHave(text(doctor));
+        $$(".text-content__breadcrumbs-item").find(text(doctor));
+    }
+
+    @DisplayName("Проверка отображения специальности доктора в его карточке")
+    @Test
+    @Tags({@Tag("CRITICAL"), @Tag("REGRESS")})
+    void checkCardDoctor(){
+        open("https://docdoc.ru/");
+
+        $("#autocomplete__placeholder").click();
+        $$(".v-autocomplete-list").find((text("Акушер"))).click();
+        $("[data-test-id = search_button]").click();
+
+        $$("[data-test-id = doctor-list-page-card-details__specialities]").find((text("Акушер")));
+
 
     }
 }
