@@ -13,7 +13,6 @@ public class TestBase {
     public static void setUp() {
         Configuration.browser = "firefox";
         Configuration.browserSize = "1920x1080";
-        baseUrl="https://sberhealth.ru/";
     }
 
 }

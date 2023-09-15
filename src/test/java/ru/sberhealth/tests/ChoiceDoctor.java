@@ -1,7 +1,8 @@
 package ru.sberhealth.tests;
 
-import com.codeborne.selenide.CollectionCondition;
-import com.codeborne.selenide.selector.ByText;
+import com.codeborne.selenide.logevents.SelenideLogger;
+import io.qameta.allure.*;
+import io.qameta.allure.selenide.AllureSelenide;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -11,12 +12,6 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.List;
 import java.util.stream.Stream;
-
-import static com.codeborne.selenide.CollectionCondition.texts;
-import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.*;
-
 
 public class ChoiceDoctor extends TestBase{
 
@@ -29,58 +24,84 @@ public class ChoiceDoctor extends TestBase{
     }
 
     @MethodSource
-    @ParameterizedTest(name = "Проверка наличия районов {1} при выборе своего города {0}")
+    @ParameterizedTest
+    @Feature("Страница 'Прием врача в клинике'")
+    @Story("Выбор определенного врача в своем городе")
+    @Owner("BarabanovAG")
+    @Severity(SeverityLevel.BLOCKER)
+    @Link(value = "Ссылка на сайт", url = "https://docdoc.ru/")
     @Tags({@Tag("BLOCKER"), @Tag("REGRESS")})
+    @DisplayName("Проверка наличия районов при выборе своего города")
     void checkСities(String city, List<String> districts){
-        open("https://docdoc.ru/");
+        SelenideLogger.addListener("allure", new AllureSelenide());
+        WebSteps steps = new WebSteps();
 
-        $("[data-test-id = city-select-button]").click();
-        $$(".CitySelectModal__cities-wrapper_1BfH span").find(text(city)).click();
-        $("[data-test-id = search_geo_input]").click();
-        $$(".v-autocomplete-list-item span").filter(visible).shouldHave(texts(districts));
+        steps.openChoiceDoctorPage();
+        steps.choiceCity(city);
+        steps.searchDistrictsOnTheCity(districts);
+
+        steps.takeScreenshot();
     }
 
 
-    @ParameterizedTest(name = "Проверка отображения названия врачей {1}, при выборе специальности {0}")
+    @ParameterizedTest
+    @Feature("Страница 'Прием врача в клинике'")
+    @Story("Выбор определенного врача в своем городе")
+    @Owner("BarabanovAG")
+    @Severity(SeverityLevel.BLOCKER)
+    @Link(value = "Ссылка на сайт", url = "https://docdoc.ru/")
+    @DisplayName("Проверка отображения названия врачей, при выборе специальности")
     @CsvFileSource(
             resources = "/NamesOfSpecialties.csv"
     )
     @Tags({@Tag("CRITICAL"), @Tag("REGRESS")})
     public void choiceOfSpecialty(String specialty, String doctor){
-        open("https://docdoc.ru/");
+        SelenideLogger.addListener("allure", new AllureSelenide());
+        WebSteps steps = new WebSteps();
 
-        $("#autocomplete__placeholder").click();
-        $$(".v-autocomplete-list").find((text(specialty))).click();
-        $("[data-test-id = search_button]").click();
-        $("[data-test-id=top_content_seo]").shouldHave(text(doctor));
-        $$(".text-content__breadcrumbs-item").find(text(doctor));
+        steps.openChoiceDoctorPage();
+        steps.searchDoctor(specialty);
+        steps.shouldSeeSelectedDoctorOnSEOContent(doctor);
+
+        steps.takeScreenshot();
     }
 
+    @Feature("Страница 'Прием врача в клинике'")
+    @Story("Выбор определенного врача в своем городе")
+    @Owner("BarabanovAG")
+    @Severity(SeverityLevel.BLOCKER)
+    @Link(value = "Ссылка на сайт", url = "https://docdoc.ru/")
     @DisplayName("Проверка отображения специальности доктора в его карточке")
     @Test
     @Tags({@Tag("CRITICAL"), @Tag("REGRESS")})
     void checkCardDoctor(){
-        open("https://docdoc.ru/");
+        SelenideLogger.addListener("allure", new AllureSelenide());
+        WebSteps steps = new WebSteps();
 
-        $("#autocomplete__placeholder").click();
-        $$(".v-autocomplete-list").find((text("Акушер"))).click();
-        $("[data-test-id = search_button]").click();
+        steps.openChoiceDoctorPage();
+        steps.searchDoctor("Акушер");
+        steps.shouldSeeDoctorOnCardDetails("Акушер");
 
-        $$("[data-test-id = doctor-list-page-card-details__specialities]").find((text("Акушер")));
+        steps.takeScreenshot();
     }
 
-
+    @Feature("Страница 'Прием врача в клинике'")
+    @Story("Выбор определенного врача в своем городе")
+    @Owner("BarabanovAG")
+    @Severity(SeverityLevel.BLOCKER)
+    @Link(value = "Ссылка на сайт", url = "https://docdoc.ru/")
     @DisplayName("Проверка выбора города")
     @ParameterizedTest
     @ValueSource(strings = {"Альметьевск", "Анапа"})
     @Tags({@Tag("CRITICAL"), @Tag("REGRESS")})
     void checkChoiceCity(String argument){
-        open("https://docdoc.ru/");
+        SelenideLogger.addListener("allure", new AllureSelenide());
+        WebSteps steps = new WebSteps();
 
-        $("[data-test-id = city-select-button]").click();
-        $$(".CitySelectModal__cities-wrapper_1BfH span").find(text(argument)).click();
+        steps.openChoiceDoctorPage();
+        steps.choiceCity(argument);
+        steps.shouldSeeSelectedCity(argument);
 
-        $("[data-test-id = city-select-button]").shouldHave(text(argument));
-
+        steps.takeScreenshot();
     }
 }
