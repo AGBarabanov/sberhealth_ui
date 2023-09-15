@@ -13,6 +13,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.util.List;
 import java.util.stream.Stream;
 
+@Tag("choice")
 public class ChoiceDoctor extends TestBase{
 
     //Параметризованный тест с @MethodSource
@@ -33,14 +34,11 @@ public class ChoiceDoctor extends TestBase{
     @Tags({@Tag("BLOCKER"), @Tag("REGRESS")})
     @DisplayName("Проверка наличия районов при выборе своего города")
     void checkСities(String city, List<String> districts){
-        SelenideLogger.addListener("allure", new AllureSelenide());
         WebSteps steps = new WebSteps();
 
         steps.openChoiceDoctorPage();
         steps.choiceCity(city);
         steps.searchDistrictsOnTheCity(districts);
-
-        steps.takeScreenshot();
     }
 
 
@@ -56,14 +54,11 @@ public class ChoiceDoctor extends TestBase{
     )
     @Tags({@Tag("CRITICAL"), @Tag("REGRESS")})
     public void choiceOfSpecialty(String specialty, String doctor){
-        SelenideLogger.addListener("allure", new AllureSelenide());
         WebSteps steps = new WebSteps();
 
         steps.openChoiceDoctorPage();
         steps.searchDoctor(specialty);
         steps.shouldSeeSelectedDoctorOnSEOContent(doctor);
-
-        steps.takeScreenshot();
     }
 
     @Feature("Страница 'Прием врача в клинике'")
@@ -75,14 +70,11 @@ public class ChoiceDoctor extends TestBase{
     @Test
     @Tags({@Tag("CRITICAL"), @Tag("REGRESS")})
     void checkCardDoctor(){
-        SelenideLogger.addListener("allure", new AllureSelenide());
         WebSteps steps = new WebSteps();
 
         steps.openChoiceDoctorPage();
         steps.searchDoctor("Акушер");
         steps.shouldSeeDoctorOnCardDetails("Акушер");
-
-        steps.takeScreenshot();
     }
 
     @Feature("Страница 'Прием врача в клинике'")
@@ -95,13 +87,10 @@ public class ChoiceDoctor extends TestBase{
     @ValueSource(strings = {"Альметьевск", "Анапа"})
     @Tags({@Tag("CRITICAL"), @Tag("REGRESS")})
     void checkChoiceCity(String argument){
-        SelenideLogger.addListener("allure", new AllureSelenide());
         WebSteps steps = new WebSteps();
 
         steps.openChoiceDoctorPage();
         steps.choiceCity(argument);
         steps.shouldSeeSelectedCity(argument);
-
-        steps.takeScreenshot();
     }
 }
