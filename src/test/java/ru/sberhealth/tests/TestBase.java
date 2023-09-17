@@ -13,16 +13,17 @@ import java.util.Map;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Configuration.baseUrl;
+import static com.codeborne.selenide.Configuration.browserVersion;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.Selenide.open;
 
 public class TestBase {
     @BeforeAll
     public static void setUp() {
-        Configuration.browser = "firefox";
-        Configuration.browserVersion = "97.0";
-        Configuration.browserSize = "1920x1080";
-        Configuration.remote = "https://user1:1234@selenoid.autotests.cloud/wd/hub";
+        Configuration.browser = System.getProperty("browser", "firefox");
+        Configuration.browserVersion = System.getProperty("browserVersion", "98.0");
+        Configuration.browserSize = System.getProperty("browserSize", "1920x1080");
+        Configuration.remote = System.getProperty("remoteUrl", "https://user1:1234@selenoid.autotests.cloud/wd/hub");
 
 
         DesiredCapabilities capabilities = new DesiredCapabilities();
