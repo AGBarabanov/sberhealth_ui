@@ -20,6 +20,9 @@ import static com.codeborne.selenide.Selenide.open;
 public class TestBase {
     @BeforeAll
     public static void setUp() {
+//        Configuration.browser = "firefox";
+//        Configuration.browserSize = "1920x1080";
+
         Configuration.browser = System.getProperty("browser", "firefox");
         Configuration.browserVersion = System.getProperty("browserVersion", "98.0");
         Configuration.browserSize = System.getProperty("browserSize", "1920x1080");

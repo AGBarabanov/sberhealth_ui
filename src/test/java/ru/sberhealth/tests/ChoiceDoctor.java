@@ -13,7 +13,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.util.List;
 import java.util.stream.Stream;
 
-@Tag("choice")
+@Tags({@Tag("choice"), @Tag("ui")})
 public class ChoiceDoctor extends TestBase{
 
     //Параметризованный тест с @MethodSource

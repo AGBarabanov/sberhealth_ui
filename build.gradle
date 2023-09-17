@@ -39,8 +39,14 @@ test {
     useJUnitPlatform()
 }
 
-task choice_test(type: Test) {
+task choice_ui_test(type: Test) {
     useJUnitPlatform {
-        includeTags("choice")
+        includeTags("choice", "ui")
+    }
+}
+
+task choice_api_test(type: Test) {
+    useJUnitPlatform {
+        includeTags("choice", "api")
     }
 }
